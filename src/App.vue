@@ -14,6 +14,7 @@
   export default 
   {
     mixins:[APIHelper],
+    components:{Countdown},
     data(){
       return{
         timers:[
