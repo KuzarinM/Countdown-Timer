@@ -11,7 +11,7 @@ export default defineConfig(({ mode }) => {
 
     const env = loadEnv(mode, process.cwd(), '');
     dotenvExpand.expand({ parsed: env });
-
+    
   return  { 
     plugins: [
     vue(),
