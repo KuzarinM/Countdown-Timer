@@ -34,8 +34,8 @@
         this.sortData()
       },
       sortData(){
-        this.data = this.timers.sort((a,b)=>a.deadline>b.deadline);
-        console.log(this.timers)
+        this.data = this.timers.sort((a,b)=>new Date(a.deadline) - new Date(b.deadline));
+        console.log(this.data)
       },
       toTwoDigits(number){
         var d = `${number}`
