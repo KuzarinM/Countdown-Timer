@@ -3,7 +3,7 @@
   import APIHelper from "./mixins/APIHelper.js";
   import { RouterLink, RouterView } from 'vue-router';
   import {Countdown} from 'vue3-flip-countdown'
-  import {createPool, createClient  } from "@vercel/postgres";
+  import {sql, createPool, createClient  } from "@vercel/postgres";
 
   export default 
   {
@@ -29,7 +29,7 @@
     methods:{
 
       async loadData(){
-        this.timers = (await this.sql`SELECT * FROM deadlines;`).rows;
+        this.timers = (await sql`SELECT * FROM deadlines;`).rows;
         console.log(this.timers)  
         this.sortData()
       },
@@ -105,12 +105,7 @@
       }
     },
     async mounted(){
-
-      const pool = createClient({
-        connectionString:"postgres://default:7cUDFEjN5VtH@ep-calm-math-49465601.us-east-1.postgres.vercel-storage.com:5432/verceldb"
-      })
-
-      this.sql = (await pool.connect()).sql
+      var process = this.process
       await this.loadData();
     }
   }
