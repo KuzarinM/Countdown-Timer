@@ -10,6 +10,7 @@
   import APIHelper from "./mixins/APIHelper.js";
   import { RouterLink, RouterView } from 'vue-router';
   import {Countdown} from 'vue3-flip-countdown'
+  import { sql } from "@vercel/postgres";
 
   export default 
   {
@@ -31,8 +32,9 @@
       }
     },
     methods:{
-      loadData(){
-        
+
+      async loadData(){
+        this.timers = await sql`SELECT * FROM deadlines;`;
 
         this.sortData()
       },
@@ -68,14 +70,17 @@
         var tArr = time.split(":")
         return new Date(parseInt(dArr[0]), parseInt(dArr[1])-1, parseInt(dArr[2]), parseInt(tArr[0]), parseInt(tArr[1],0))
       },
-      addData(){
+      async addData(){
         var newTimer = {
           name:$("#name_line_new").val(),
           deadline:this.toDate($("#date_line_new").val(),$("#time_line_new").val())
         }
+
+        await sql`INSERT INTO deadlines (name, deadline) values (${newTimer.name}, ${newTimer.deadline})`;
+
         console.log(newTimer);
-        this.timers.push(newTimer);
-        this.sortData()
+
+        await this.loadData();
         $("#modal_close").click()
       },
       deleteData(index){
@@ -86,8 +91,8 @@
 
       }
     },
-    mounted(){
-      this.loadData();
+    async mounted(){
+      await this.loadData();
     }
   }
 </script>
@@ -107,6 +112,8 @@
         }}</small>
     </div>
   </article>
+
+  <!--Модальное окно-->
   <div class="modal fade" id="modalId" tabindex="-1" role="dialog" aria-labelledby="modalTitleId" aria-hidden="true">
     <div class="modal-dialog modal-dialog-scrollable modal-dialog-centered modal-lg" role="document">
       <div class="modal-content">
@@ -157,7 +164,6 @@
     </div>
   </div>
   
-  <!--<RouterView />-->
 </template>
 
 <style scoped>
