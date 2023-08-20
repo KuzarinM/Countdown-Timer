@@ -21,14 +21,15 @@
             deadline:new Date(2024,0,1,0,0,0)
           },
         ],
-        data:Array
+        data:Array,
+        updates:false
       }
     },
     methods:{
 
       async loadData(){
-        this.timers = await sql`SELECT * FROM deadlines;`;
-
+        this.timers = (await sql`SELECT * FROM deadlines;`).rows;
+        console.log(this.timers)  
         this.sortData()
       },
       sortData(){
@@ -68,20 +69,38 @@
           name:$("#name_line_new").val(),
           deadline:this.toDate($("#date_line_new").val(),$("#time_line_new").val())
         }
+        console.log(newTimer)
+        if(newTimer.name==null || newTimer.name=="" || !this.isValidDate(newTimer.deadline)) {
+          alert("Некоректные данные!!!")
+          return;
+        }
 
+        $("#name_line_new").val("")
+        $("#date_line_new").val("")
+        $("#time_line_new").val("")
         await sql`INSERT INTO deadlines (name, deadline) values (${newTimer.name}, ${newTimer.deadline})`;
 
-        console.log(newTimer);
-
+        this.updates = true;
         await this.loadData();
-        $("#modal_close").click()
       },
-      deleteData(index){
-        //Да, удалить что-то в js это ооочень плохо и сложно. Так что реализую потом, как только сделаю себе БД
-        $("#modal_close").click()
+      async deleteData(id, name){
+        
+        if(!confirm(`Вы действительно хотите удалить событие ${name}?`)) return
+
+        await sql`DELETE FROM deadlines WHERE id = ${id}`;
+
+        this.updates = true;
+        await this.loadData();
       },
       saveData(){
-
+        this.closeModal()
+      },
+      closeModal(){
+        if(this.updates) location = location
+        else $("#modal_close").click()
+      },
+      isValidDate(d) {
+        return d instanceof Date && !isNaN(d);
       }
     },
     async mounted(){
@@ -94,7 +113,7 @@
   <header class="mx-1">
     <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalId">Изменить</button>
   </header>
-  <article class="d-flex flex-column">
+  <article class="d-flex flex-column" >
     <div class="d-flex flex-column panel mx-auto" v-for="(item, index) in this.data">
       <h1 class="mx-auto">{{ item.name }}</h1>
       <Countdown 
@@ -107,12 +126,13 @@
   </article>
 
   <!--Модальное окно-->
-  <div class="modal fade" id="modalId" tabindex="-1" role="dialog" aria-labelledby="modalTitleId" aria-hidden="true">
+  <div class="modal fade" id="modalId" tabindex="-1" role="dialog" data-bs-backdrop="static" data-bs-keyboard="false" aria-labelledby="modalTitleId" aria-hidden="true">
     <div class="modal-dialog modal-dialog-scrollable modal-dialog-centered modal-lg" role="document">
       <div class="modal-content">
         <div class="modal-header">
           <h5 class="modal-title" id="modalTitleId">Настройка таймеров</h5>
-            <button id="modal_close" type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            <button id="modal_close" type="button" class="btn-close hide" data-bs-dismiss="modal" aria-label="Close"></button>
+            <button type="button" class="btn-close" @click="this.closeModal()"></button>
         </div>
         <div class="modal-body">
           <div class="d-flex mb-3" v-for="(item, index) in this.data">
@@ -131,7 +151,7 @@
               <input type="time" class="form-control" :id="`date_line_${index}`" 
               :value="this.toTimeFormat(item.deadline)" readonly>
             </div>
-            <button type="button" class="btn btn-danger my-3">Удалить</button>
+            <button type="button" class="btn btn-danger my-3" @click="this.deleteData(item.id, item.name)">Удалить</button>
           </div>
         </div>
 
@@ -151,7 +171,7 @@
             </div>
           </div>
           <button type="button" class="btn btn-success" @click="addData">Добавить</button>
-          <button type="button" class="btn btn-primary">Сохранить</button>
+          <button type="button" class="btn btn-primary" @click="saveData">Сохранить</button>
         </div>
       </div>
     </div>
