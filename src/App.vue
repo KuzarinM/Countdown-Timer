@@ -1,10 +1,3 @@
-<!-- <script setup>
-  import $ from "jquery"; 
-  import APIHelper from "./mixins/APIHelper.js";
-  import { RouterLink, RouterView } from 'vue-router';
-  import {Countdown} from 'vue3-flip-countdown'
-</script> -->
-
 <script>
     import $ from "jquery"; 
   import APIHelper from "./mixins/APIHelper.js";
