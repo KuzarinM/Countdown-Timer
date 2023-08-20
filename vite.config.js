@@ -7,14 +7,12 @@ import dotenvExpand from 'dotenv-expand';
 // https://vitejs.dev/config/
 
 
-export default ({ mode }) => {
-  // This check is important!
-  if (mode === 'development') {
+export default defineConfig(({ mode }) => {
+
     const env = loadEnv(mode, process.cwd(), '');
     dotenvExpand.expand({ parsed: env });
-  }
 
-  return defineConfig({ 
+  return  { 
     plugins: [
     vue(),
   ],
@@ -23,6 +21,5 @@ export default ({ mode }) => {
       '@': fileURLToPath(new URL('./src', import.meta.url))
     }
   }}
-  )
-}
+});
 
