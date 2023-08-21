@@ -1,29 +1,24 @@
-# TestFront
+# Countdown timer
 
-This template should help get you started developing with Vue 3 in Vite.
+This is a vue 3 project focused on creating a site to view the countdown to deadlines. If you like this kind of thing, enjoy!
 
-## Recommended IDE Setup
 
-[VSCode](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur) + [TypeScript Vue Plugin (Volar)](https://marketplace.visualstudio.com/items?itemName=Vue.vscode-typescript-vue-plugin).
+## Actual deployment
 
-## Customize configuration
+This project is now deployed on a free service [Vercel](https://vercel.com). The database is on it, too.\
+[This is the deployed version.](https://countdown-timer-roan-alpha.vercel.app/)
 
-See [Vite Configuration Reference](https://vitejs.dev/config/).
 
-## Project Setup
+## Downloaded project setup
 
 ```sh
 npm install
-```
-
-### Compile and Hot-Reload for Development
-
-```sh
 npm run dev
 ```
 
-### Compile and Minify for Production
+## Compile and Minify for Production
 
 ```sh
+npm install
 npm run build
 ```
