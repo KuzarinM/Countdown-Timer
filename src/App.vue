@@ -111,7 +111,7 @@
 </script>
 
 <template>
-  <header class="mx-1 d-flex justify-content-between">
+  <header class="mx-1 d-none d-md-flex justify-content-between">
     <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalId">Изменить</button>
     <a class="link-success m-3" href="https://github.com/KuzarinM/Countdown-Timer">Исходный код (github)</a>
   </header>
