@@ -116,11 +116,15 @@
     <a class="link-success m-3" href="https://github.com/KuzarinM/Countdown-Timer">Исходный код (github)</a>
   </header>
   <article class="d-flex flex-column">
-    <div class="d-flex flex-column panel mx-auto" v-for="(item, index) in this.data">
+    <div class="d-flex flex-column panel mx-auto bacgrounded" v-for="(item, index) in this.data">
       <h1 class="mx-auto">{{ item.name }}</h1><!-- title -->
       <Countdown 
       :labels="{days:'дней', hours:'часов', minutes:'минут', seconds:'секунды'}" 
-      :deadlineDate="item.deadline" /><!-- countdown timer -->
+      :deadlineDate="item.deadline"
+      :mainFlipBackgroundColor="'#6ce1d6'"
+      :secondFlipBackgroundColor="'#6ce1d6'"
+      :mainColor="'#124f07'"
+      :secondFlipColor="'#124f07'" /><!-- countdown timer -->
       <small class="text-center">{{ this.printData(item.deadline) }}</small><!-- deadline date and time -->
     </div>
   </article>
@@ -182,4 +186,7 @@
 </template>
 
 <style scoped>
+.bacgrounded{
+  background-color: #daebd4;
+}
 </style>
